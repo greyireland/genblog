@@ -6,15 +6,27 @@ categories:
   - tool
 date: 2018-09-19 14:29:54
 ---
-### 优点
+# 优点
 
 1. 轻量
 2. 可以直接打开文件夹&文件
 3. 可以安装各种插件
 
-### 快键键
+# 常用配置
 
-#### 常用
+### 主题
+atom one dark
+
+### 文件图标
+vscode icons/nomo dark icon theme
+
+### 键盘map
+intellij idea keybindings 插件
+
+### 插件
+
+
+#### 原始快捷键
 ```
 alt shift 下  向下复制一行
 
