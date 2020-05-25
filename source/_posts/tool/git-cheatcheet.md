@@ -7,12 +7,9 @@ categories:
 date: 2018-09-19 16:12:32
 ---
 
-# 简图
-![](https://ws1.sinaimg.cn/large/e5320b2aly1fwy5q46d3lj215k10nabc.jpg)
+## 常用命令
 
-
-# 常用命令
-~~~
+```bash
 git add . //ga
 git status //gs
 git diff //gd
@@ -20,29 +17,31 @@ git commit -m "desc" //gcm
 git push //gp
 git checkout -b feature/comment //gcb
 git pull origin master //gpom
-~~~
+```
 
 ## 偶尔用到
-~~~
-git push --set-upstream origin dev_2 
+
+```bash
+git push --set-upstream origin dev_2
 git stash
 git log
 git cherry-pick xxx
 git init
 git clone
-~~~
+```
 
 ### 很少用到
-~~~
+
+```bash
 git config --global user.name "muName"
 git config --global user.email "myEmail"
-~~~
+```
 
-### GET NEW THING
+### 其他
 
 #### 比对 diff
 
-```
+```bash
 # 显示暂存区和工作区的代码差异
 $ git diff
 
@@ -58,29 +57,41 @@ $ git diff [first-branch]...[second-branch]
 
 ```
 
-```
+```bash
 # 从暂存区移除一个文件
 git rm file
 # 从暂存区移除所有文件
 git reset .
 ```
 
-#### rebase 变基【为了提交好看】
+#### rebase
+
+为了提交好看
 
 #### gitnore
-```
+
+```bash
 filename  //递归 忽略当前目录下所有包含此文件名的文件
-dir/      //递归 忽略目录和子目录 
+dir/      //递归 忽略目录和子目录
 !filename //递归 不忽略文件名
 
 ```
 
+## 实现原理
 
-### 存储
-![](https://ws1.sinaimg.cn/large/e5320b2aly1g210qd00udj20l20h6do5.jpg)
+![添加暂存区](../../images/git_add.gif)
+![提交](../../images/git_commit.gif)
 
-- commit
-- tree
-- blob
+所有的操作都是在操作下面这些元素
+![整体元素](../../images/git_object.png)
 
-差异存储，后面的可以引用前面的blob和tree
+流程
+git add .
+
+- 把修改文件添加到 Git object 存储
+- 把索引指向更新
+
+git commit -m 'update'
+
+- 创建一个新的提交
+- 将 HEAD 指向这个新的提交点

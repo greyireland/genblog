@@ -6,11 +6,16 @@ categories:
   - python
 date: 2019-10-07 20:48:01
 ---
-# python安装
+
+## python 常见问题
+
+### 安装
+
 `virtualenv -p /usr/bin/python2.7 venv`
 
-# python常用函数
-```
+### python 常用函数
+
+```py
 # str
 s1 = str()
 # in python `''` or `""` is the same
@@ -99,12 +104,12 @@ t=Tom('tom')
 t.hello()
 ```
 
-### Python一些注意点
+### 注意点
 
-1. Python有七个序列类型： 字符串、 Unicode字符串、 列表、 元组、 字节数组、 缓冲区和xrange对象。序列类型 —  str、unicode、list、 tuple、 bytearray、buffer、xrange
-2. if and执行逻辑
+1. Python 有七个序列类型： 字符串、 Unicode 字符串、 列表、 元组、 字节数组、 缓冲区和 xrange 对象。序列类型 — str、unicode、list、 tuple、 bytearray、buffer、xrange
+2. if and 执行逻辑
 
-```
+```py
 def is_a():
     print 'a'
     return False
@@ -119,12 +124,13 @@ if __name__=='__main__':
         print 'if中有先后顺序的'
 ```
 
-### 遇到的一些问题
-1. tornado框架：
+### 问题
 
-1）异步async+await配合，2）效果和yield差不多，3）也可以使用callback
+#### tornado 框架
 
-```
+1）异步 async+await 配合，2）效果和 yield 差不多，3）也可以使用 callback
+
+```py
 from tornado import gen
 
 @gen.coroutine
@@ -138,40 +144,40 @@ def fetch_coroutine(url):
     return response.body
 ```
 
-```
+```py
 async def fetch_coroutine(url):
     http_client = AsyncHTTPClient()
     response = await http_client.fetch(url)
     return response.body
 ```
 
-2. python语法
+#### 装饰器
 
-- 何时执行装饰器：导入模块时
+何时执行装饰器：导入模块时
 
 用处：将函数添加到中央注册处，url-》相应函数
 
 - 装饰器将函数替换成新的函数(添加一个记时功能给函数)：
 
-```
+```py
 @clock
 def haha():
 	xxxxx
-	
-	
+
+
 def clock(func):
 	def clocked(*arg):
 		func(*arg)
 	return clocked #返回新的函数了，替换掉原来的haha()
 ```
 
-- == a.__eq--(b)和比较值Java中：equals，is比较对象标识（地址）Java中：==
+- == a.\_\_eq--(b)和比较值 Java 中：equals，is 比较对象标识（地址）Java 中：==
 - Copy.deepcopy(obj)会记住循环引用，优雅处理
 - @classmethod 最常见的用法是构建备选的构造方法
 
-3. 重试函数
+#### 重试函数
 
-```
+```py
 #encoding=utf8
 
 #有参数，必须再包一层（最外层的变量大家都可以访问）
@@ -200,9 +206,9 @@ if __name__=="__main__":
    test('123','tome')
 ```
 
-4. 回调函数callback调用
+#### 回调函数 callback 调用
 
-```
+```py
 class Callback:
     def run_callback(self,fn,*args,**kwargs):
         print 'call function',fn.__name__
@@ -222,4 +228,3 @@ class Callback:
 
 Callback.start()
 ```
-

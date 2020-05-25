@@ -8,16 +8,18 @@ categories:
 date: 2019-05-12 16:40:49
 ---
 
-# linux进程守护
+## linux 进程守护
 
 ### 安装
-```
+
+```bash
 pip install supervisor
 supervisord -v
 ```
 
 ### 命令
-```
+
+```bash
 1.配置路径
 mkdir -p /etc/supervisor
 
@@ -56,11 +58,12 @@ supervisorctl reload
 ```
 
 ### 额外
-```
+
+```bash
 把配置文件中 inet_http_server 前面的分号去掉 在Supervisor中 ;是注释的格式 默认是不开启web界面的
 
 [inet_http_server]         ; inet (TCP) server disabled by default
 port=*:9001        ; (ip_address:port specifier, *:port for all iface)
 username=user              ; (default is no username (open server))
-password=123 
+password=123
 ```

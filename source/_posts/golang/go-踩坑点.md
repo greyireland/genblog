@@ -1,17 +1,19 @@
 ---
 title: go-踩坑点
 date: 2018-09-19 10:53:27
-categories: 
-- go
+categories:
+  - go
 tags:
-- go 
+  - go
 ---
-# go遇到的一些问题
 
+## go 遇到的一些问题
 
-###  chan关闭之后，还可以读写吗？
+### chan 关闭之后，还可以读写吗
+
 > 不能写，但可以读
-~~~
+
+```go
 package main
 
 import (
@@ -62,10 +64,11 @@ func main() {
 	}
 }
 
-~~~
+```
 
 ### 并发获取数据，常见问题
-~~~
+
+```go
 for _,v:=range uids{
 	go func(){
     	fmt.Println(v)//v的值是一样的！
@@ -77,4 +80,4 @@ for _,v:=range uids{
     	fmt.Println(v)//v的值正常
     }(v)
 }
-~~~
+```

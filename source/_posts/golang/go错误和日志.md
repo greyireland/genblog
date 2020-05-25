@@ -21,10 +21,10 @@ date: 2019-10-16 10:19:05
 
 当要把 error 作为返回值的时候，可以考虑如下的处理方式
 
-- 是不是不需要额外信息，如果是，errors.New 就足够了。（4星）
-- client 需要检测和处理返回的 error 吗？如果是，最好使用实现了 Error() 方法的自定义类型，这样可以包含更多的信息。（3星）
-- error 是不是从下游函数传递过来的？如果是，考虑一下 error wrap。（5星）
-- 其他情况，fmt.Errorf 一般足够了。（5星）
+- 是不是不需要额外信息，如果是，errors.New 就足够了。（4 星）
+- client 需要检测和处理返回的 error 吗？如果是，最好使用实现了 Error() 方法的自定义类型，这样可以包含更多的信息。（3 星）
+- error 是不是从下游函数传递过来的？如果是，考虑一下 error wrap。（5 星）
+- 其他情况，fmt.Errorf 一般足够了。（5 星）
 
 另外：在直接暴露自定义的 error 类型的时候，最好 export 配套的检测自定义 error 类型的函数。
 
@@ -59,13 +59,11 @@ if err := foo.Open("foo"); err != nil {
 
 ## 日志处理
 
-## 示例
-
 ```go
 fmt.Errorf("unsupported signing method: %T", opts.SignMethod)
 log.Warn("unknown JWT options", zap.Strings("keys", keys))
-plog.Errorf("problem loading JWT options: %s", err)
-plog.Infof("deleting token %s for user %s", tk, username)
-plog.Errorf("failed to hash password: %s", err)
+log.Errorf("problem loading JWT options: %s", err)
+log.Infof("deleting token %s for user %s", tk, username)
+log.Errorf("failed to hash password: %s", err)
 
 ```

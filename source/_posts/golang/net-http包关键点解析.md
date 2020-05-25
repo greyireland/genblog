@@ -7,15 +7,18 @@ categories:
 date: 2019-03-03 13:23:19
 ---
 
-# net/http包关键点解析
-## Go创建一个http server
-如何创建http server服务端?
+## net/http 包关键点解析
 
-核心：
+### Go 创建一个 http server
 
-1.保存path和handler的对应关系
+如何创建 http server 服务端
 
-2.请求过来时，查找path对应的handler，然后调用handler的ServeHTTP(w, r)方法
+核心
+
+1.保存 path 和 handler 的对应关系
+
+2.请求过来时，查找 path 对应的 handler，然后调用 handler 的 ServeHTTP(w, r)方法
+
 ```go
 package main
 
@@ -34,40 +37,36 @@ func main() {
 }
 
 ```
-首先调用Http.HandleFunc
+
+首先调用 Http.HandleFunc
 
 按顺序做了几件事：
 
-1. 调用了DefaultServerMux的HandleFunc
-2. 调用了DefaultServerMux的Handle
-3. 往DefaultServeMux的map[string]muxEntry中增加对应的handler和路由规则
+1. 调用了 DefaultServerMux 的 HandleFunc
+2. 调用了 DefaultServerMux 的 Handle
+3. 往 DefaultServeMux 的 map[string]muxEntry 中增加对应的 handler 和路由规则
 
-其次调用http.ListenAndServe(“:8001”, nil)
+其次调用 http.ListenAndServe(“:8001”, nil)
 按顺序做了几件事情：
-1. 实例化Server
-2. 调用Server的ListenAndServe()
-3. 调用net.Listen(“tcp”, addr)监听端口
-4. 启动一个for循环，在循环体中Accept请求
-对每个请求实例化一个Conn，并且开启一个goroutine为这个请求进行服务go c.serve()
-读取每个请求的内容w, err := c.readRequest()
-判断header是否为空，如果没有设置handler（这个例子就没有设置handler），handler就设置为DefaultServeMux调用handler的ServeHttp
-5. 下面就进入到DefaultServerMux.ServeHttp
-根据request选择handler，并且进入到这个handler的ServeHTTP mux.handler(r).ServeHTTP(w, r)选择handler：
-    - 判断是否有路由能满足这个request（循环遍历ServerMux的muxEntry）
 
-    - 如果有路由满足，调用这个路由handler的ServeHttp
+- 实例化 Server
+- 调用 Server 的 ListenAndServe()
+- 调用 net.Listen(“tcp”, addr)监听端口
+- 启动一个 for 循环，在循环体中 Accept 请求
+  对每个请求实例化一个 Conn，并且开启一个 goroutine 为这个请求进行服务 go c.serve()
+  读取每个请求的内容 w, err := c.readRequest()
+- 判断 header 是否为空，如果没有设置 handler（这个例子就没有设置 handler），handler 就设置为 DefaultServeMux 调用 handler 的 ServeHttp
+  下面就进入到 DefaultServerMux.ServeHttp
+- 根据 request 选择 handler，并且进入到这个 handler 的 ServeHTTP mux.handler(r).ServeHTTP(w, r)选择 handler： - 判断是否有路由能满足这个 request（循环历 ServerMux 的 muxEntry）
+- 如果有路由满足，调用这个路由 handler 的 ServeHttp
+- 如果没有路由满足，调用 NotFoundHandler 的 ServeHttp
 
-    - 如果没有路由满足，调用NotFoundHandler的ServeHttp
+### Go 发送 http 请求
 
+步骤
 
-
-
-
-## Go 发送http请求
-步骤：
-1. 创建request
-2. 创建一个Client将request发送出去，依赖底层RT实现，可以是默认的Transport，也可以是Mock的Transport或者带缓存的Transport
-
+1. 创建 request
+2. 创建一个 Client 将 request 发送出去，依赖底层 RT 实现，可以是默认的 Transport，也可以是 Mock 的 Transport 或者带缓存的 Transport
 
 ```go
 func httpDo() {
@@ -78,22 +77,22 @@ func httpDo() {
     DisableCompression: true,
   }
     client := &http.Client{Transport: tr}
- 
+
     req, err := http.NewRequest("POST", "http://www.baidu.com", strings.NewReader("name=cjb"))
     if err != nil {
         // handle error
     }
     req.Header.Set("Cookie", "name=anny")
- 
+
     resp, err := client.Do(req)
- 
+
     defer resp.Body.Close()
- 
+
     body, err := ioutil.ReadAll(resp.Body)
     if err != nil {
         // handle error
     }
- 
+
     fmt.Println(string(body))
 }
 ```
@@ -141,9 +140,10 @@ client := &http.Client{
 
 ```
 
+## 问题
 
-### QA问题？
-0. net/http相关类介绍？
+net/http 相关类介绍？
+
 ```go
 Server： 服务器类，接收请求后起协程 处理请求：go srv.newConn(rw).serve(ctx)
 
@@ -164,7 +164,10 @@ Transport：Http默认传输器，发送网络请求
 
 ```
 
-1. 函数HandlerFunc变成handler?【设计模式之适配器模式】
+函数 HandlerFunc 如何变成 handler?
+
+> 设计模式之适配器模式
+
 ```go
 type Handler interface {
 	ServeHTTP(ResponseWriter, *Request)
@@ -177,9 +180,10 @@ func (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request) {
 
 ```
 
-2. DefaultServerMux可以替换吗？
+DefaultServerMux 可以替换吗？
 
-可以，如使用httprouter替换默认的DefaultServerMux路由
+> 可以，如使用 httprouter 替换默认的 DefaultServerMux 路由
+
 ```go
 package main
 

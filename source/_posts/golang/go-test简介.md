@@ -8,8 +8,9 @@ categories:
 date: 2019-03-13 11:16:46
 ---
 
-# golang 测试基本用法
+## golang 测试基本用法
 
+### 入门
 
 ```go
 package main
@@ -52,7 +53,8 @@ func StringBuffer() string {
 }
 ```
 
-测试源码【goland可以使用cmd+shift+T快键键生成测试用例】
+测试源码【goland 可以使用 cmd+shift+T 快键键生成测试用例】
+
 ```go
 package main
 
@@ -133,7 +135,8 @@ func BenchmarkWriteKV(b *testing.B) {
 
 ```
 
-常见执行命令
+### 常见执行命令
+
 ```go
 // 基本测试
 go test -v  //执行所有Test方法
@@ -147,9 +150,9 @@ ok      AAA/go-test     0.008s
 
 
 //基准测试
-go test -v bench=. -benchmem //执行所有基准测试用例 
+go test -v bench=. -benchmem //执行所有基准测试用例
 示例：
-➜  go-test go test -v -bench=String -benchmem -cover 
+➜  go-test go test -v -bench=String -benchmem -cover
 goos: darwin
 goarch: amd64
 pkg: AAA/go-test
@@ -168,12 +171,13 @@ ok      AAA/go-test     8.019s
 1 allocs/op //一次操作几次内存分配
 ```
 
-### 常用命令
+最常用命令
+
 ```go
 go test -v -run=^TestStringBuilder$
 go test -v bench=^TestStringBuilder$ -benchmem
 ```
 
-### 深入库
+### 更深入了解
 
 [assert](https://godoc.org/github.com/stretchr/testify/assert)

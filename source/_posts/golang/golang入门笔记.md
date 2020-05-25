@@ -6,45 +6,32 @@ categories:
   - go
 date: 2017-10-07 21:10:08
 ---
-# GO笔记
 
-需要掌握的点：
+## GO 笔记
 
-- http请求
-- http服务
-- json解析
-- 日志
-- mysql库
-- redis库
-- list和map使用
-- goroutine使用
-- 网络框架使用
+### 基本库和概念
 
-
-
-基本库和概念
-
-```
+```go
 //*T 可以传给值接收，也可以传给指针接收，所以传入尽量*T,接收也尽量用*T呗
 //使用接口：1.定义接口 2.定义类 3.类实现接口
 //a:=[2]byte{'a','1',2}//byte ascii 1 2等这些是显示不出来的，他和'1','2'不一样，后面ascii码：31 32
-	
+
 //传入的所有参数都是interface{}，传出的所有参数也是interface{} 所以出来的时候必须要转为所需要的类型
 ```
 
-1. 模块 类概念
+### 模块 类概念
 
-#### go的包和文件夹名是一样的（跟文件名关系不大）
+go 的包和文件夹名是一样的（跟文件名关系不大）
 
 > java:com.alibaba.dubbo.xxx
 >
 > c++:namespace std
+>
+> go: package 包
 
-> go: package 包 
+### 类
 
-#### 类
-
-##### 继承、封装、多态
+继承、封装、多态
 
 ```go
 type Person struct{
@@ -73,7 +60,7 @@ type Duck struct{
 	Flyable//隐式继承接口
 }
 type Cat struct {
-	
+
 }
 
 func (t *Duck)Fly()  {
@@ -84,9 +71,11 @@ func (t *Cat)Fly()  {//隐式继承接口
 }
 ```
 
-#### 类型包含嵌入类型，就包含嵌入类型所有的财产（你是我的，你所有东西都是我的）
+### 嵌入类型
 
-```
+包含嵌入类型所有的财产（你是我的，你所有东西都是我的）
+
+```go
 类型
 type 类型名字 底层类型
 1.代表类型别名，附带新方法
@@ -136,9 +125,9 @@ func (*E)Efunc()  {
 }
 ```
 
+### 可变参数
 
-
-#### 可变参数...interface{}，传入的当做[]interface{}切片
+...interface{}，传入的当做[]interface{}切片
 
 ```go
 func Println(vals ...interface{}){
@@ -148,9 +137,9 @@ func Println(vals ...interface{}){
 func Println(vals []interface{}){}
 ```
 
+### http.Request 请求
 
-
-#### http.Request请求（服务端需要Request,和Response往里面写数据）
+服务端需要 Request,和 Response 往里面写数据
 
 包括：
 
@@ -158,13 +147,15 @@ func Println(vals []interface{}){}
 
 2.请求头
 
-3.请求体（一般post才有）
+3.请求体（一般 post 才有）
 
-```
+```go
 resp:=DefaultTransport.send(req)//创建一个连接，然后通过这条连接发送req数据，服务端通过这条连接读取req然后构建resp，（也通过resp可以拿到连接的标识，去某个地方获取到这条连接），然后通过连接把resp发送回去
 ```
 
-#### http.Response响应（客户端需要Response从里面读数据，读完了就关闭）
+### http.Response 响应
+
+客户端需要 Response 从里面读数据，读完了就关闭
 
 包括：
 
@@ -172,17 +163,15 @@ resp:=DefaultTransport.send(req)//创建一个连接，然后通过这条连接�
 
 2.返回头
 
-3.返回body
+3.返回 body
 
-4.请求实例http.Request
+4.请求实例 http.Request
 
-可拿到底层连接net.Conn(可读可写)
+可拿到底层连接 net.Conn(可读可写)
 
+### 读写锁
 
-
-#### 读写锁
-
-```
+```go
 func (rw *RWMutex) Lock()　　写锁，如果在添加写锁之前已经有其他的读锁和写锁，则lock就会阻塞直到该锁可用，为确保该锁最终可用，已阻塞的 Lock 调用会从获得的锁中排除新的读取器，即写锁权限高于读锁，有写锁时优先进行写锁定
 func (rw *RWMutex) Unlock()　写锁解锁，如果没有进行写锁定，则就会引起一个运行时错误
 
@@ -191,23 +180,19 @@ func (rw *RWMutex) RLock() 读锁，当有写锁时，无法加载读锁，当�
 func (rw *RWMutex)RUnlock()　读锁解锁，RUnlock 撤销单次RLock 调用，它对于其它同时存在的读取器则没有效果。若 rw 并没有为读取而锁定，调用 RUnlock 就会引发一个运行时错误(注：这种说法在go1.3版本中是不对的，例如下面这个例子)。
 ```
 
-#### context
+### context
 
-##### 三种ctx：
+三种 ctx
 
-```
+```go
 timerCtx:超时的ctx，超过某个时间就close(chan)
 cancelCtx:可取消的ctx，使用close(chan)
 valueCtx:保存键值的ctx
 ```
 
+### 并发、channel、select、sync
 
-
-
-
-#### 并发、channel、select、sync
-
-##### 超时控制：
+超时控制
 
 ```go
 taskdone:=make(chan struct{},1)
@@ -226,13 +211,9 @@ case <-time.After(time.Millisecond*5000):
 }
 ```
 
+### scanf 扫描
 
-
-##### scanf 扫描，一行一行读取数据嘛，或者一个个字符的读取
-
-
-
-#### go buffer
+一行一行读取数据嘛，或者一个个字符的读取
 
 读完之后就丢弃掉数据
 
@@ -242,7 +223,7 @@ data0,_,_:=buf.ReadRune()
 fmt.Println(string(data0),buf.String())
 ```
 
-#### go time
+### go time
 
 ```go
 转为ts:t.unix()
@@ -250,7 +231,7 @@ fmt.Println(string(data0),buf.String())
 转为Time:time.parse(str,layout)
 ```
 
-#### json,xml,gob
+### json,xml,gob
 
 ```go
 var network bytes.Buffer
@@ -264,7 +245,7 @@ dec.Decode(&m)//解码到哪里
 fmt.Println(m)
 ```
 
-#### 字符串拼接：
+### 字符串拼接
 
 ```go
 a+="hello"
@@ -275,19 +256,17 @@ for condition {
     return b.String()
 ```
 
-#### 指针
+### 指针
 
-> **永远不要使用一个指针指向一个接口类型，因为它已经是一个指针。**
+**永远不要使用一个指针指向一个接口类型，因为它已经是一个指针。**
 
-```
+```go
 write(w io.Writer)//没有w *io.Writer这种
 ```
 
+### 包管理
 
-
-#### 包管理
-
-```
+```go
 自己clone
 mkdir -p github.com/user
 git clone repo
@@ -295,7 +274,7 @@ cd github.com/user/repo
 go build xxx//缺啥去下载啥
 ```
 
-```
+```go
 golang.org/x/net ，其实镜像托管在在 github.com/golang/net
 你可以用 go get github.com/golang/net 之后，到 GOPATH/src 中
 mv github.com/golang/net golang.org/x/net
@@ -305,7 +284,7 @@ go get github.com/golang/text
 mv github.com/golang/text golang.org/x/text
 ```
 
-```
+```go
 mkdir -p $GOPATH/src/golang.org/x/
 cd !$
 git clone https://github.com/golang/net.git
@@ -313,9 +292,9 @@ git clone https://github.com/golang/sys.git
 git clone https://github.com/golang/tools.git
 ```
 
-#### http参数解析
+### http 参数解析
 
-```
+```go
 r.ParseForm()
 uid :=r.Form.Get("uid")//get post/form-data
 fmt.Println(uid)
@@ -323,9 +302,9 @@ body,_:=ioutil.ReadAll(r.Body)//json post
 fmt.Println(string(body))
 ```
 
-#### error错误处理
+### error 错误处理
 
-```
+```go
 //1.最普通
 if err!=nil{
   return result,err
@@ -336,22 +315,18 @@ defer func(){
     //dosomething()
   }
 }
-panic()	
+panic()
 
 //有些错误可以处理，有些选择处理
 
 ```
 
-#### go的http请求比Java的http请求
+### 默认值和 nil
 
-> 有一个[]byte到string的一个转换
-
-#### =默认值和nil
-
-```
-bool      -> false                              
-numbers -> 0                                 
-string    -> ""      
+```go
+bool      -> false
+numbers -> 0
+string    -> ""
 
 pointers -> nil
 slices -> nil
@@ -363,9 +338,9 @@ interfaces -> nil
 //可以使用len(slice)==0
 ```
 
-#### TCP和UDP
+### TCP 和 UDP
 
-```
+```go
 //tcp
 func ResolveTCPAddr(net, addr string) (*TCPAddr, os.Error)
 func ListenTCP(net string, laddr *TCPAddr) (l *TCPListener, err os.Error)
@@ -404,80 +379,59 @@ func main() {
 */
 package main
 import (
-"bytes"
-"encoding/base64"
-"fmt"
+	"bytes"
+	"encoding/base64"
+	"fmt"
 )
 func main() {
-  eightBitData := []byte{1, 2, 3, 4, 5, 6, 7, 8}
-  bb := &bytes.Buffer{}
-  encoder := base64.NewEncoder(base64.StdEncoding, bb)//转为base64字符串
-  encoder.Write(eightBitData)
-  encoder.Close()
-  fmt.Println(bb)
-  dbuf := make([]byte, 12)
-  decoder := base64.NewDecoder(base64.StdEncoding, bb)
-  decoder.Read(dbuf)
-  for _, ch := range dbuf {
-  	fmt.Print(ch)
-  }
+	eightBitData := []byte{1, 2, 3, 4, 5, 6, 7, 8}
+	bb := &bytes.Buffer{}
+	encoder := base64.NewEncoder(base64.StdEncoding, bb)//转为base64字符串
+	encoder.Write(eightBitData)
+	encoder.Close()
+	fmt.Println(bb)
+	dbuf := make([]byte, 12)
+	decoder := base64.NewDecoder(base64.StdEncoding, bb)
+	decoder.Read(dbuf)
+	for _, ch := range dbuf {
+		fmt.Print(ch)
+	}
 }
 ```
 
+### 细节点
 
-
-#### #项目分层
-
-
-
-
-
-#### 笔记
-
-```
+```go
 select{}//阻塞
 
 ```
 
-
-
-```
+```go
 SERVE_HTTP=":3030" go run 43.go
 address = os.Getenv("SERVE_HTTP")//直接从上面拿
 ```
 
+默认类型
 
-
-# 类型
-
-```
+```go
 nil 是 interface、function、pointer、map、slice 和 channel 类型变量的默认初始值
 ```
 
-
-
-# 注意注意
-
 go 修改值全部用指针
 
-切片，map先make，再取地址比较好
+切片，map 先 make，再取地址比较好
 
-
-
-问题代码：
-
-```
 问题代码
+
+```go
 //下面是一个坑
-	//for _, v := range *userInfos {
-	//	userInfoTempMap[v.User.ID] = &v
-	//}
+//for _, v := range *userInfos {
+//	userInfoTempMap[v.User.ID] = &v
+//}
 
 ```
 
-
-
-```
+```go
 func fillUserInfo(queryUids *[]int64, userInfoTempMap map[int64]*model.RUserInfo, selfU int64) {
 	if queryUids == nil || len(*queryUids) == 0 {
 		return
@@ -499,3 +453,14 @@ func fillUserInfo(queryUids *[]int64, userInfoTempMap map[int64]*model.RUserInfo
 }
 ```
 
+## 需要掌握的点
+
+- http 请求
+- http 服务
+- json 解析
+- 日志
+- mysql 库
+- redis 库
+- list 和 map 使用
+- goroutine 使用
+- 网络框架使用

@@ -1,14 +1,14 @@
 ---
 title: linux 服务器常用命令整理
 date: 2018-07-21 21:24:15
-categories: 
-- linux
-tags: 
-- linux
-- cmd
+categories:
+  - linux
+tags:
+  - linux
+  - cmd
 ---
 
-# linux 服务器常用命令整理
+## linux 服务器常用命令整理
 
 ### 目录
 
@@ -26,27 +26,21 @@ tags:
 #### tcpdump
 
 1. tcp:用来过滤数据报的类型
-2. -i eth1 : 只抓经过接口eth1的包
+2. -i eth1 : 只抓经过接口 eth1 的包
 3. -t : 不显示时间戳
-4. -s 0 : 抓取数据包时默认抓取长度为68字节, 加上-S 0 后可以抓到完整的数据包
-5. -c 100 : 只抓取100个数据包
-6. dst port !22: 不抓取目标端口是22数据包
-7. src net 10.99.184.0/24 : 数据包的源网络地址为10.99.184.0/24
-8. -A：显示数据包内容 
+4. -s 0 : 抓取数据包时默认抓取长度为 68 字节, 加上-S 0 后可以抓到完整的数据包
+5. -c 100 : 只抓取 100 个数据包
+6. dst port !22: 不抓取目标端口是 22 数据包
+7. src net 10.99.184.0/24 : 数据包的源网络地址为 10.99.184.0/24
+8. -A：显示数据包内容
 
 示例：
 
 `tcpdump -i any -v port 8888`
 
-`tcpdump -i any -A port 8888  `
+`tcpdump -i any -A port 8888`
 
-sudo tcpdump port 17280 -i lo0  -X
-
-![](https://ws2.sinaimg.cn/large/006tNc79ly1fp6dysyqizj30lb08mt9e.jpg)
-
-![](https://ws3.sinaimg.cn/large/006tNc79ly1fp6dzuovqqj30w6093jtc.jpg)
-
-
+sudo tcpdump port 17280 -i lo0 -X
 
 #### netstat
 
@@ -54,32 +48,30 @@ sudo tcpdump port 17280 -i lo0  -X
 
 `netstat -autnp`
 
-查看监听的tcp服务
+查看监听的 tcp 服务
 
-`netstat -altnp`  
+`netstat -altnp`
 
-看tcp端口
+看 tcp 端口
 
 `netstat -ltnp`
 
-![](https://ws2.sinaimg.cn/large/006tNc79ly1fp6e3o8h15j30ck090glz.jpg)
-
 #### ss
 
-- `ss -pl`   查看每个进程及其监听的端口
-- `ss -t -a`  查看所有的tcp连接
-- `ss -u -a`  查看所有的udp连接
+- `ss -pl` 查看每个进程及其监听的端口
+- `ss -t -a` 查看所有的 tcp 连接
+- `ss -u -a` 查看所有的 udp 连接
 
 #### lsof
 
-- `lsof -i :8888`  查看端口8888进程信息
-- `lsof -p 7915` 查看进程7915打开的fd信息
+- `lsof -i :8888` 查看端口 8888 进程信息
+- `lsof -p 7915` 查看进程 7915 打开的 fd 信息
 
 #### scp
 
-- `scp -r src remote:/tmp`  本地拷贝到远端
-- `scp -r remote:/tmp/src .`  远端拷贝到本地
-- `scp -3  remote:/tmp/a.tar   remote2:/tmp/`  以本地为跳板机，将remote机器上文件拷贝到remote2
+- `scp -r src remote:/tmp` 本地拷贝到远端
+- `scp -r remote:/tmp/src .` 远端拷贝到本地
+- `scp -3 remote:/tmp/a.tar remote2:/tmp/` 以本地为跳板机，将 remote 机器上文件拷贝到 remote2
 
 #### rsync
 
@@ -88,44 +80,36 @@ sudo tcpdump port 17280 -i lo0  -X
 
 #### nc
 
-- `nc -l 8888`   本地启动8888端口
-- `nc -l 8888 > a.tgz`   接收文件
-- `nc ali-a-bpc-userdevelop01.bj:8888   < a.tgz` 发送文件到远端
+- `nc -l 8888` 本地启动 8888 端口
+- `nc -l 8888 > a.tgz` 接收文件
+- `nc ali-a-bpc-userdevelop01.bj:8888 < a.tgz` 发送文件到远端
 
 #### vmstat
 
-- `vmstat 1 10`对内存监控，重点关注swpd、free、si、so。一般系统不繁忙的状态下，swpd、so的值不会持续很高，经常为0。如果swpd过高，那么就是系统内存经常不够用。
-- 对CPU监控，我们可以查看r（运行进程数）、us、sy、id（CPU空闲），如果r的数字大于系统CPU个数，则面临CPU不够用的危险，通过id分析，如果过小，则可以判断是CPU不足。
-
-![](https://ws1.sinaimg.cn/large/006tNc79ly1fp6e824wffj30sg09vta7.jpg)
-
-
+- `vmstat 1 10`对内存监控，重点关注 swpd、free、si、so。一般系统不繁忙的状态下，swpd、so 的值不会持续很高，经常为 0。如果 swpd 过高，那么就是系统内存经常不够用。
+- 对 CPU 监控，我们可以查看 r（运行进程数）、us、sy、id（CPU 空闲），如果 r 的数字大于系统 CPU 个数，则面临 CPU 不够用的危险，通过 id 分析，如果过小，则可以判断是 CPU 不足。
 
 #### iostat
 
-- `iostat -x` 一般情况下，%util应该越小越好，10%以下正常，30%IO比较繁忙。50%以上一般是有问题的
-
-![](https://ws2.sinaimg.cn/large/006tNc79ly1fp6e8iekncj30sg05qgm6.jpg)
-
-
+- `iostat -x` 一般情况下，%util 应该越小越好，10%以下正常，30%IO 比较繁忙。50%以上一般是有问题的
 
 #### top
 
-- 1  按CPU核数查看
+- 1 按 CPU 核数查看
 - P
 - M
 - c 查看完整进程命令
-- top -Hp pid  查看线程数
+- top -Hp pid 查看线程数
 
 #### ps
 
-- `ps -eo “pid,cmd,lstart”  | grep pid`   查看进程启动时间
-- `ps -ef f`  查看最近进程（常用）
+- `ps -eo “pid,cmd,lstart” | grep pid` 查看进程启动时间
+- `ps -ef f` 查看最近进程（常用）
 
 #### find
 
-- `find . -type f -mtime +3`   修改时间大于3天的文件
-- `find . -type f -mtime +3 | xargs rm -rf`  查找并删除
+- `find . -type f -mtime +3` 修改时间大于 3 天的文件
+- `find . -type f -mtime +3 | xargs rm -rf` 查找并删除
 
 #### du
 
@@ -138,19 +122,17 @@ sudo tcpdump port 17280 -i lo0  -X
 
 -F 以空格分割
 
+#### xargs
 
-### 扩展
-```
-
+```bash
 # xargs 使用
 //查询redis members里面的值
 redis-cli smembers myset|awk '{print $1}'|xargs -I {} redis-cli get {}
-
 ```
 
+#### 查看进程监听的端口
 
-### 查看进程监听的端口
-```
+```bash
 
 查看程序对应进程号：ps –ef|grep 进程名
 
@@ -162,6 +144,11 @@ Linux下查看端口号所使用的进程号：
 
 使用lsof命令： lsof –i:端口号
 
+```
+
+#### 其他
+
+```bash
 vim 块注释
 ctrl+v
 选择
@@ -171,5 +158,4 @@ ESC 等一秒
 
 抓包
 tcpdump -i lo0 port 1234 -A
-
 ```

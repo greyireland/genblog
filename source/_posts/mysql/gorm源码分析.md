@@ -6,11 +6,12 @@ categories:
   - gorm
 date: 2019-10-07 21:06:26
 ---
-# gorm源码解析
 
-gorm使用示例：
+## gorm 源码解析
 
-```
+gorm 使用示例
+
+```go
 package main
 
 import (
@@ -33,24 +34,22 @@ func main() {
 	db.AutoMigrate(&Product{})
 	db.Create(&Product{Code: "L1212", Price: 1000})
 	var product Product
-	db.First(&product, 1)                  
-	db.First(&product, "code = ?", "L1212") 
+	db.First(&product, 1)
+	db.First(&product, "code = ?", "L1212")
 	db.Model(&product).Update("Price", 2000)
 	db.Delete(&product)
 }
 ```
 
+gorm 一般的初始化方式
 
-
-gorm一般的初始化方式
-
-```
+```go
 db, err := gorm.Open("mysql", "user:password@/dbname?charset=utf8&parseTime=True&loc=Local")
 ```
 
-gorm中DB结构体的定义：
+gorm 中 DB 结构体的定义：
 
-```
+```go
 // DB的结构体
 type DB struct {
     sync.RWMutex                       // 锁
@@ -61,7 +60,7 @@ type DB struct {
     // single db
     db                SQLCommon        // SQL接口，包括（Exec、Prepare、Query、QueryRow）
     blockGlobalUpdate bool             // 为true时，可以在update在没有where条件是报错，避免全局更新
-    logMode           logModeValue     // 日志模式，gorm提供了三种   
+    logMode           logModeValue     // 日志模式，gorm提供了三种
     logger            logger           // 内部日志实例
     search            *search          // 查询相关的条件
     values            sync.Map         // value Map
@@ -69,14 +68,14 @@ type DB struct {
     // global db
     parent        *DB                  // 父db，为了保存一个空的初始化后的db，也为了保存curd注册的的callback方法
     callbacks     *Callback            // callback方法
-    dialect       Dialect              // 不同类型数据库对应的不同实现的相同接口 
+    dialect       Dialect              // 不同类型数据库对应的不同实现的相同接口
     singularTable bool                 // 表名是否为复数形式，true时为user，false时为users
 }
 ```
 
-SQLCommon定义基本的查询接口
+SQLCommon 定义基本的查询接口
 
-```
+```go
 // SQLCommon is the minimal database connection functionality gorm requires.  Implemented by *sql.DB.
 type SQLCommon interface {
 	Exec(query string, args ...interface{}) (sql.Result, error)
@@ -86,11 +85,9 @@ type SQLCommon interface {
 }
 ```
 
+gorm 的 Open 方法：
 
-
-gorm的Open方法：
-
-```
+```go
 func Open(dialect string, args ...interface{}) (db *DB, err error) {
     if len(args) == 0 {
         err = errors.New("invalid database source")
@@ -141,9 +138,9 @@ func Open(dialect string, args ...interface{}) (db *DB, err error) {
 }
 ```
 
-gorm是通过多个callbsck方法来实现curd的，具体流程以一个查询为例：
+gorm 是通过多个 callbsck 方法来实现 curd 的，具体流程以一个查询为例：
 
-```
+```go
 DBEngine.Table(entry.TableName).
     Select(entry.Select).
     Where(entry.sql, entry.values).
@@ -153,9 +150,9 @@ DBEngine.Table(entry.TableName).
 
 执行步骤：
 
-1.执行Table方法，添加tablename条件：
+1.执行 Table 方法，添加 tablename 条件：
 
-```
+```go
 func (s *DB) Table(name string) *DB {
     clone := s.clone()        // 执行clone方法也就是从新的db中赋值一个空的，避免交叉影响
     clone.search.Table(name)  // 赋值table name
@@ -164,9 +161,9 @@ func (s *DB) Table(name string) *DB {
 }
 ```
 
-2.执行Where方法，添加where条件：
+2.执行 Where 方法，添加 where 条件：
 
-```
+```go
 // 首先也是调用clone方法，然后调用search的Where方法
 func (s *DB) Where(query interface{}, args ...interface{}) *DB {
     return s.clone().search.Where(query, args...).db
@@ -179,9 +176,9 @@ func (s *search) Where(query interface{}, values ...interface{}) *search {
 }
 ```
 
-3.执行Order方法，添加order条件：
+3.执行 Order 方法，添加 order 条件：
 
-```
+```go
 // 类似Where，reorder为true会强制刷掉gorm默认的order by
 func (s *DB) Order(value interface{}, reorder ...bool) *DB {
     return s.clone().search.Order(value, reorder...).db
@@ -200,9 +197,9 @@ func (s *search) Order(value interface{}, reorder ...bool) *search {
 }
 ```
 
-4.执行Find方法，真正实现查询：
+4.执行 Find 方法，真正实现查询：
 
-```
+```go
 // 首先先创建一个scope（可以理解成只针对本次数据库操作有效的一个环境），再调用inlineCondition内部方法，最后执行callcallbacks一系列方法实现真正的查询操作，并将db返回
 func (s *DB) Find(out interface{}, where ...interface{}) *DB {
     return s.NewScope(out).inlineCondition(where...).callCallbacks(s.parent.callbacks.queries).db

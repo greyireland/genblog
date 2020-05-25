@@ -6,9 +6,10 @@ categories:
   - go
 date: 2018-09-19 15:46:07
 ---
-# bytes.Buffer
 
-## java StringBuilder
+## bytes.Buffer
+
+### java StringBuilder
 
 ```java
 StringBuilder sb = new StringBuilder();
@@ -17,7 +18,7 @@ sb.append(",world");
 System.out.println(sb.toString());
 ```
 
-## go bytes.Buffer
+### go bytes.Buffer
 
 ```go
 var bb bytes.Buffer

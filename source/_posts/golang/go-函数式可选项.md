@@ -9,11 +9,12 @@ categories:
 date: 2019-03-10 21:52:22
 ---
 
-# 函数式可选项
+## 函数式可选项
 
 通过参数创建实例，常见方式
 
 常用方式
+
 ```go
 func NewStuffClient(conn Connection, timeout, retries int) StuffClient {
     return &stuffClient{
@@ -37,11 +38,13 @@ func NewStuffClientWithOptions(conn Connection, timeout, retries int) StuffClien
     }
 }
 ```
+
 或者
+
 ```go
 type StuffClientOptions struct {
-    Retries int 
-    Timeout int 
+    Retries int
+    Timeout int
 }
 //传入对象
 func NewStuffClient(conn Connection, options StuffClientOptions) StuffClient {
@@ -55,6 +58,7 @@ func NewStuffClient(conn Connection, options StuffClientOptions) StuffClient {
 ```
 
 更高级的方式，通过闭包函数注入
+
 ```go
 type StuffClientOptions struct {
     Retries int //number of times to retry the request before giving up
@@ -92,7 +96,8 @@ func NewStuffClient(conn Connection, opts ...StuffClientOption) StuffClient {
 ```
 
 使用方式
-```
+
+```go
 x := NewStuffClient(Connection{})
 fmt.Println(x) // prints &{{} 2 3}
 x = NewStuffClient(
@@ -109,15 +114,18 @@ fmt.Println(x) // prints &{{} 1 1}
 
 ```
 
-### 模式步骤：
-1. 定义options
-2. 定义option
+### 模式步骤
+
+1. 定义 options
+2. 定义 option
 3. 定义闭包函数
 4. 传入函数选项
 5. 调用函数,注入配置到选项
 
 ### 实际项目使用
-redigo go的redis连接客户端代码片段
+
+redigo go 的 redis 连接客户端代码片段
+
 ```go
 
 //1 声明options
