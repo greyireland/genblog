@@ -4,21 +4,21 @@ tags:
   - go
 categories:
   - go
-date: 2019-10-07 21:10:08
+date: 2017-10-07 21:10:08
 ---
 # GO笔记
 
 需要掌握的点：
 
-- http请求==ok
-- http服务==ok
-- json解析==ok
-- 日志==ok
-- mysql库==ok
-- redis库==ok
-- list和map使用==ok
-- goroutine使用==ok
-- 网络框架使用==ok
+- http请求
+- http服务
+- json解析
+- 日志
+- mysql库
+- redis库
+- list和map使用
+- goroutine使用
+- 网络框架使用
 
 
 

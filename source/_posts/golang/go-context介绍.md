@@ -173,10 +173,10 @@ func tree() {
   ctx6 := context.WithValue(ctx5, "userID", 12)
 }
 ```
-![](https://ws1.sinaimg.cn/large/e5320b2aly1g0zzr8v1daj20ud0aidgl.jpg)
+![](https://raw.githubusercontent.com/greyireland/images/master/img/20191029111804.png)
 
 5s超时之后
-![](https://ws1.sinaimg.cn/large/e5320b2aly1g0zzro55rgj20ud0aidgn.jpg)
+![](https://raw.githubusercontent.com/greyireland/images/master/img/20191029111828.png)
 
 
 什么时候用context

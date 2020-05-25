@@ -7,11 +7,11 @@ categories:
 date: 2019-04-05 23:23:09
 ---
 
-# Gin框架概览
+## Gin 框架概览
 
 ### 基本用法
 
-```
+```go
 package main
 
 import "github.com/gin-gonic/gin"
@@ -23,15 +23,13 @@ func main() {
 			"message": "pong",
 		})
 	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+ r.Run() // listen and serve on 0.0.0.0:8080
 }
 ```
 
+### 实现 middleware
 
-
-#### 1.实现middleware
-
-```
+```go
 //使用middleware
 r := gin.New()
 r.Use(gin.Recovery())
@@ -46,7 +44,7 @@ func Recovery() HandlerFunc {
 		//fmt.Print("before")
 		c.Next()
 		//fmt.Print("after")
-		
+
 	}
 }
 
@@ -70,9 +68,9 @@ r.Use(gin.Recovery()) //添加middleware到Handlers链条
 type HandlerFunc func(*Context)
 ```
 
-#### 2.路径分组实现
+### 路径分组实现
 
-```
+```go
 //使用方式
 mux = gin.New()
 api := mux.Group("/api/v1")
@@ -91,9 +89,9 @@ func (group *RouterGroup) Group(relativePath string, handlers ...HandlerFunc) *R
 }
 ```
 
-#### 3.入口
+### 入口
 
-```
+```go
 func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	c := engine.pool.Get().(*Context)//并发：多个context
 	c.writermem.reset(w) //resp
@@ -105,4 +103,3 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	engine.pool.Put(c)
 }
 ```
-

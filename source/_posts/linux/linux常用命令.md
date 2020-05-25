@@ -64,8 +64,6 @@ sudo tcpdump port 17280 -i lo0  -X
 
 ![](https://ws2.sinaimg.cn/large/006tNc79ly1fp6e3o8h15j30ck090glz.jpg)
 
-
-
 #### ss
 
 - `ss -pl`   查看每个进程及其监听的端口
@@ -170,5 +168,8 @@ ctrl+v
 大写I
 输入注释符号
 ESC 等一秒
+
+抓包
+tcpdump -i lo0 port 1234 -A
 
 ```

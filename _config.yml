@@ -78,7 +78,6 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type: git
-  repo: git@gitee.com:greyireland/greyireland.git
+- type: git
+  repo: git@github.com:greyireland/greyireland.github.io.git
   branch: master
-

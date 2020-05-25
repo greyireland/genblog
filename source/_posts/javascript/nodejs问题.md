@@ -10,7 +10,7 @@ Nodejs踩坑
 
 1.执行函数后面记得加分号结束;
 
-```
+```js
 function hello(uid,callback)
 
 hello(uid,function(){});//一定要加;
@@ -21,7 +21,7 @@ functionfunction
 
 2.判断条件
 
-```
+```js
 a = []
 b = ""
 c = {}
