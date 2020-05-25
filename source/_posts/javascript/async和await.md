@@ -5,7 +5,7 @@ tags:
   - async
 categories:
   - js
-date: 2019-12-04 15:41:49
+date: 2017-12-04 15:41:49
 ---
 
 ## async和await示例
